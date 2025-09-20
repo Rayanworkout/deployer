@@ -20,12 +20,15 @@ use crate::models::Project;
 
 fn main() -> () {
     db::create_database().expect("Failed to init database, aborting ...");
-    insert_project(&Project {
+
+    match insert_project(&Project {
         name: String::from("dummy2q"),
         description: None,
         github_url: Some(String::from("https://github.com/rayanssse")),
-    })
-    .expect("");
+    }) {
+        Ok(_) => println!("Success"),
+        Err(e) => println!("{e}"),
+    }
 }
 
 // #[launch]
