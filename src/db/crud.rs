@@ -1,27 +1,17 @@
 use crate::models::Command;
 use crate::models::Project;
-use rusqlite::{Connection, Result, ToSql};
+use rusqlite::Result;
 
-use crate::db::{DB_PATH, TABLE_PROJECTS};
+use crate::db::TABLE_PROJECTS;
+use crate::db::utils::{insert, project_exists};
 
-fn insert(table_name: &str, fields: &[&str], values: &[&dyn ToSql]) -> Result<()> {
-    let conn = Connection::open(DB_PATH)?;
+use crate::models::ProjectCreationError;
 
-    // Build placeholders like ?1, ?2, ?3
-    let placeholders: Vec<String> = (1..=fields.len()).map(|i| format!("?{}", i)).collect();
+pub fn insert_project(project: &Project) -> Result<(), ProjectCreationError> {
+    if project_exists(&project)? {
+        return Err(ProjectCreationError::AlreadyExists);
+    }
 
-    let sql = format!(
-        "INSERT INTO {} ({}) VALUES ({})",
-        table_name,
-        fields.join(", "),
-        placeholders.join(", ")
-    );
-
-    conn.execute(&sql, values)?;
-    Ok(())
-}
-
-pub fn _insert_project(project: &Project) -> Result<()> {
     insert(
         TABLE_PROJECTS,
         &["name", "description", "github_url"],
