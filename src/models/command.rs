@@ -1,6 +1,6 @@
 #[derive(Debug)]
-pub struct Project {
+pub struct Command {
     pub name: String,
+    pub content: Option<String>,
     pub description: Option<String>,
-    pub github_url: Option<String>
 }

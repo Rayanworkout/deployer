@@ -17,8 +17,8 @@ pub fn create_database() -> rusqlite::Result<()> {
             "CREATE TABLE IF NOT EXISTS {} (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
             name        TEXT NOT NULL,
-            description TEXT NOT NULL,
-            github_url  TEXT NOT NULL
+            description TEXT,
+            github_url  TEXT
         )",
             TABLE_PROJECTS
         ),
