@@ -3,24 +3,43 @@
 use rusqlite::Connection;
 use std::fs;
 
+use crate::db::{DB_PATH, TABLE_COMMANDS, TABLE_PROJECTS};
+
 pub fn create_database() -> rusqlite::Result<()> {
     // Ensure db folder exists
     fs::create_dir_all("db").expect("Failed to create");
 
-    let conn = Connection::open("db/deployer.db")?;
+    let conn = Connection::open(DB_PATH)?;
 
+    // Creating the projects table
     conn.execute(
-        "CREATE TABLE IF NOT EXISTS projects (
-            id      INTEGER PRIMARY KEY AUTOINCREMENT,
-            name    TEXT NOT NULL,
-            description  TEXT NOT NULL,
+        &format!(
+            "CREATE TABLE IF NOT EXISTS {} (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            name        TEXT NOT NULL,
+            description TEXT NOT NULL,
             github_url  TEXT NOT NULL
         )",
+            TABLE_PROJECTS
+        ),
         [],
     )?;
 
-    println!("Database and project table created successfully.");
+    // And the commands table
+    conn.execute(
+        &format!(
+            "CREATE TABLE IF NOT EXISTS {} (
+            id      INTEGER PRIMARY KEY AUTOINCREMENT,
+            name    TEXT NOT NULL,
+            content    TEXT NOT NULL,
+            description  TEXT NOT NULL
+        )",
+            TABLE_COMMANDS
+        ),
+        [],
+    )?;
+
+    println!("Database and projects table created successfully.");
 
     Ok(())
 }
-

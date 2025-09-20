@@ -10,8 +10,22 @@ use rocket_dyn_templates::{Template, context};
 // FileServer to serve static files
 use rocket::fs::FileServer;
 
+use crate::db::crud::insert_project;
+use crate::models::Project;
+
 #[get("/")]
 fn index() -> Template {
+    let project_example = Project {
+        name: String::from("Dummy Project"),
+        description: String::from("Aucune"),
+        github_url: String::from("https://github.com"),
+    };
+
+    match insert_project(&project_example) {
+        Ok(_) => {}
+        Err(_) => {}
+    };
+
     Template::render("index", context! {})
 }
 
