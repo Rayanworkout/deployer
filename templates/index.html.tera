@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Deployer</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -24,37 +25,8 @@
                 Project</button>
         </div>
 
-        <!-- Projects Table -->
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Name</th>
-                            <th>Repository</th>
-                            <th>Last Commit</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Example row -->
-                        <tr>
-                            <td>MyApp</td>
-                            <td>github.com/example/myapp</td>
-                            <td>2025-09-18</td>
-                            <td><span class="badge bg-success">Running</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal"
-                                    data-bs-target="#recipeModal">Recipe</button>
-                                <button class="btn btn-sm btn-warning">Deploy</button>
-                                <button class="btn btn-sm btn-danger">Remove</button>
-                            </td>
-                        </tr>
-                        <!-- More rows dynamically inserted -->
-                    </tbody>
-                </table>
-            </div>
+        <div id="projectList">
+            {% include "partials/projects.html" ignore missing %}
         </div>
     </div>
 
@@ -62,7 +34,8 @@
     <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content">
+            <form class="modal-content" hx-post="/create-project" hx-trigger="submit" hx-target="#projectList"
+                hx-swap="outerHTML">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -110,7 +83,11 @@ docker run -d --name myapp myapp
         </div>
     </div>
 
+    <script src="/js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

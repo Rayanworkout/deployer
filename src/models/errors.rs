@@ -2,8 +2,8 @@
 #[derive(Debug)]
 pub enum ProjectCreationError {
     AlreadyExists,
-    // InvalidName,
-    // InvalidGithubUrl,
+    InvalidName,
+    InvalidGithubUrl,
     DatabaseError(rusqlite::Error),
 }
 
@@ -18,8 +18,8 @@ impl fmt::Display for ProjectCreationError {
                     "A project with this name or github URL already exists ..."
                 )
             }
-            // ProjectCreationError::InvalidName => write!(f, "Invalid project name"),
-            // ProjectCreationError::InvalidGithubUrl => write!(f, "Invalid GitHub URL"),
+            ProjectCreationError::InvalidName => write!(f, "Invalid project name"),
+            ProjectCreationError::InvalidGithubUrl => write!(f, "Invalid GitHub URL"),
             ProjectCreationError::DatabaseError(_) => write!(f, "Internal database error"),
         }
     }

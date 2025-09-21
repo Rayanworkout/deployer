@@ -1,0 +1,32 @@
+<!-- Projects Table -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Repository</th>
+                    <th>Last Commit</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example row -->
+                <tr>
+                    <td>MyApp</td>
+                    <td>github.com/example/myapp</td>
+                    <td>2025-09-18</td>
+                    <td><span class="badge bg-success">Running</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                            data-bs-target="#recipeModal">Recipe</button>
+                        <button class="btn btn-sm btn-warning">Deploy</button>
+                        <button class="btn btn-sm btn-danger">Remove</button>
+                    </td>
+                </tr>
+                <!-- More rows dynamically inserted -->
+            </tbody>
+        </table>
+    </div>
+</div>
