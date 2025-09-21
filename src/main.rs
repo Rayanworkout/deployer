@@ -7,11 +7,12 @@ mod models;
 // Template engine
 use rocket::form::FromForm;
 use rocket::http::Status;
-use rocket::serde::json::Json;
+use rocket::form::Form;
 use rocket_dyn_templates::{Template, context};
 
 // FileServer to serve static files
 use rocket::fs::FileServer;
+use rocket::response::Redirect;
 
 use crate::db::{get_projects, insert_project};
 use crate::models::{Project, ProjectCreationError};
@@ -30,9 +31,9 @@ pub struct ProjectForm {
     pub github_url: Option<String>,
 }
 
-#[post("/create-project", format = "json", data = "<project_json>")]
-fn create_project(project_json: Json<Project>) -> Result<Json<Vec<Project>>, (Status, String)> {
-    let pj = project_json.into_inner();
+#[post("/create-project", data = "<project_form>")]
+fn create_project(project_form: Form<ProjectForm>) -> Result<Redirect, (Status, String)> {
+    let pj = project_form.into_inner();
 
     let project = Project {
         name: pj.name,
@@ -41,15 +42,8 @@ fn create_project(project_json: Json<Project>) -> Result<Json<Vec<Project>>, (St
     };
 
     match insert_project(&project) {
-        Ok(_) => {
-            // Fetch all projects again
-            match get_projects() {
-                Ok(projects) => Ok(Json(projects)),
-                Err(e) => Err((Status::InternalServerError, e.to_string())),
-            }
-        }
+        Ok(_) => Ok(Redirect::to(uri!(index))),
         Err(e) => {
-            // Map your custom error into HTTP status + message
             let (status, msg) = match e {
                 ProjectCreationError::AlreadyExists => (Status::Conflict, e.to_string()),
                 ProjectCreationError::InvalidName => (Status::BadRequest, e.to_string()),

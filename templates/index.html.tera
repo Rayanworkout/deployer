@@ -13,7 +13,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">🚀 Deployer</a>
+            <a class="navbar-brand" href="/">🚀 Deployer</a>
         </div>
     </nav>
 
@@ -26,7 +26,7 @@
         </div>
 
         <div id="projectList">
-            {% include "partials/projects" ignore missing %}
+            {% include "partials/projects_list" %}
         </div>
     </div>
 
@@ -34,24 +34,23 @@
     <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content" hx-post="/create-project" hx-trigger="submit" hx-target="#projectList"
-                hx-swap="outerHTML">
+            <form action="/create-project" method="post" class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="projectName" class="form-label">Project Name</label>
-                        <input type="text" class="form-control" id="projectName" required>
+                        <label for="name" class="form-label">Project Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="repoUrl" class="form-label">Repository URL</label>
-                        <input type="url" class="form-control" id="repoUrl" required>
+                        <label for="github_url" class="form-label">Repository URL</label>
+                        <input type="url" class="form-control" name="github_url" required>
                     </div>
                     <div class="mb-3">
                         <label for="recipe" class="form-label">Deployment Recipe</label>
-                        <textarea class="form-control" id="recipe" rows="4"
+                        <textarea class="form-control" name="recipe" rows="4"
                             placeholder="git pull && docker build ..."></textarea>
                     </div>
                 </div>
@@ -68,6 +67,8 @@
     <script src="https://unpkg.com/htmx.org@1.9.12"
         integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
         crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+
 </body>
 
 </html>
