@@ -3,12 +3,16 @@ use crate::models::Project;
 use rusqlite::Connection;
 use rusqlite::Result;
 
-use crate::db::utils::{insert, project_exists};
+use std::io;
+
+use crate::db::utils::{delete, insert, project_exists};
 use crate::db::{DB_PATH, TABLE_COMMANDS, TABLE_PROJECTS};
 
 use crate::models::ProjectCreationError;
 
-pub fn insert_project(project: &Project) -> Result<(), ProjectCreationError> {
+/////////// PROJECTS ///////////
+
+pub fn create_project(project: &Project) -> Result<(), ProjectCreationError> {
     if project_exists(&project)? {
         return Err(ProjectCreationError::AlreadyExists);
     }
@@ -23,18 +27,8 @@ pub fn insert_project(project: &Project) -> Result<(), ProjectCreationError> {
     Ok(())
 }
 
-pub fn insert_command(command: &Command) -> Result<()> {
-    insert(
-        TABLE_COMMANDS,
-        &["name", "content", "description"],
-        &[&command.name, &command.content, &command.description],
-    )?;
-
-    println!(
-        "Successfully created the following command: \"{}\" ...",
-        command.name
-    );
-    Ok(())
+pub fn delete_project(name: &str) -> Result<(), io::Error> {
+    delete(TABLE_PROJECTS, "name", name)
 }
 
 pub fn get_projects() -> Result<Vec<Project>, ProjectCreationError> {
@@ -59,4 +53,19 @@ pub fn get_projects() -> Result<Vec<Project>, ProjectCreationError> {
     }
 
     Ok(projects)
+}
+
+/////////// COMMANDS ///////////
+pub fn insert_command(command: &Command) -> Result<()> {
+    insert(
+        TABLE_COMMANDS,
+        &["name", "content", "description"],
+        &[&command.name, &command.content, &command.description],
+    )?;
+
+    println!(
+        "Successfully created the following command: \"{}\" ...",
+        command.name
+    );
+    Ok(())
 }

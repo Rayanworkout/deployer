@@ -33,7 +33,7 @@ impl fmt::Display for ProjectCreationError {
 // we can use the `?` operator in functions that return `Result<T, ProjectCreationError>`.
 //
 // Example:
-//     fn insert_project(...) -> Result<(), ProjectCreationError> {
+//     fn create_project(...) -> Result<(), ProjectCreationError> {
 //         let conn = Connection::open(DB_PATH)?; // if this fails, a rusqlite::Error
 //                                                // is automatically turned into
 //                                                // ProjectCreationError::DatabaseError

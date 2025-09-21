@@ -1,3 +1,5 @@
+use std::io;
+
 use rusqlite::{Connection, Result, ToSql, params};
 
 use crate::db::DB_PATH;
@@ -36,5 +38,27 @@ pub fn insert(table_name: &str, fields: &[&str], values: &[&dyn ToSql]) -> Resul
     );
 
     conn.execute(&sql, values)?;
+    Ok(())
+}
+
+pub fn delete(table_name: &str, attribute: &str, value: &str) -> Result<(), io::Error> {
+    let conn = Connection::open(DB_PATH)
+        .map_err(|_| io::Error::new(io::ErrorKind::Other, "DB open failed"))?;
+
+    let sql = format!("DELETE FROM {} WHERE {} = ?1", table_name, attribute);
+
+    let affected = conn
+        .execute(&sql, rusqlite::params![value])
+        .map_err(|_| io::Error::new(io::ErrorKind::Other, "DB query failed"))?;
+
+    if affected == 0 {
+        // nothing deleted -> not found
+        return Err(io::Error::new(io::ErrorKind::NotFound, "No rows deleted"));
+    }
+
+    println!(
+        "Successfully deleted from {} where {} = \"{}\" ...",
+        table_name, attribute, value
+    );
     Ok(())
 }

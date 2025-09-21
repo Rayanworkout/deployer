@@ -23,7 +23,12 @@
                         <button class="btn btn-sm btn-info" data-bs-toggle="modal"
                             data-bs-target="#recipeModal">Recipe</button>
                         <button class="btn btn-sm btn-warning">Deploy</button>
-                        <button class="btn btn-sm btn-danger">Remove</button>
+                        <form action="/delete-project/{{ project.name }}" method="post" class="d-inline"
+                            onsubmit="return confirm('Are you sure you want to delete {{ project.name }}?');">
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+
                     </td>
                 </tr>
                 {% endfor %}
