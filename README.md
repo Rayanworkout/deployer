@@ -1,1 +1,5 @@
 Deployer tool web UI to deploy projects on server with list of commands (recipe). Can see last commit date, deploy from a specific branch etc
+
+TODO:
+
+- Edit project

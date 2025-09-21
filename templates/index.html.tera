@@ -26,7 +26,7 @@
         </div>
 
         <div id="projectList">
-            {% include "partials/projects.html" ignore missing %}
+            {% include "partials/projects" ignore missing %}
         </div>
     </div>
 
@@ -60,26 +60,6 @@
                     <button type="submit" class="btn btn-primary">Add Project</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- Recipe Modal -->
-    <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="recipeModalLabel">Deployment Recipe</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <pre><code>
-git pull
-docker build -t myapp .
-docker stop myapp || true
-docker run -d --name myapp myapp
-                    </code></pre>
-                </div>
-            </div>
         </div>
     </div>
 
