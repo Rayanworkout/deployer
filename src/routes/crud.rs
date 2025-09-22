@@ -1,5 +1,5 @@
 use crate::db::{create_project, delete_project};
-use crate::models::{Project, ProjectCreationError};
+use crate::models::Project;
 
 use crate::routes;
 
@@ -8,7 +8,7 @@ use std::io;
 use rocket::form::Form;
 use rocket::form::FromForm;
 use rocket::http::Status;
-use rocket::response::Redirect;
+use rocket::response::{Flash, Redirect};
 
 #[derive(FromForm)]
 pub struct ProjectForm {
@@ -18,7 +18,7 @@ pub struct ProjectForm {
 }
 
 #[post("/create-project", data = "<project_form>")]
-pub fn create_project_view(project_form: Form<ProjectForm>) -> Result<Redirect, (Status, String)> {
+pub fn create_project_view(project_form: Form<ProjectForm>) -> Result<Redirect, Flash<Redirect>> {
     let pj = project_form.into_inner();
 
     let project = Project {
@@ -30,15 +30,8 @@ pub fn create_project_view(project_form: Form<ProjectForm>) -> Result<Redirect, 
     match create_project(&project) {
         Ok(_) => Ok(Redirect::to(uri!(routes::home))),
         Err(e) => {
-            let (status, msg) = match e {
-                ProjectCreationError::AlreadyExists => (Status::Conflict, e.to_string()),
-                ProjectCreationError::InvalidName => (Status::BadRequest, e.to_string()),
-                ProjectCreationError::InvalidGithubUrl => (Status::BadRequest, e.to_string()),
-                ProjectCreationError::DatabaseError(_) => {
-                    (Status::InternalServerError, e.to_string())
-                }
-            };
-            Err((status, msg))
+            let msg = e.to_string();
+            Err(Flash::error(Redirect::to(uri!(crate::routes::home)), msg))
         }
     }
 }
