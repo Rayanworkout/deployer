@@ -13,9 +13,13 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">🚀 Deployer</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/favicon.ico" alt="" width="60" height="60" class="me-2">
+                Deployer
+            </a>
         </div>
     </nav>
+
 
     <!-- Main Container -->
     <div class="container my-4">

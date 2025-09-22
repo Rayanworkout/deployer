@@ -14,7 +14,7 @@
             <tbody>
                 {% for project in projects %}
                 <tr>
-                    <td>{{ project.name }}</td>
+                    <td><b>{{ project.name }}</b></td>
                     <td>{{ project.github_url }}</td>
                     <td>-</td>
                     <td>-</td>
