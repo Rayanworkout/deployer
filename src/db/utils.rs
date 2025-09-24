@@ -24,6 +24,23 @@ pub fn project_exists(project: &Project) -> Result<bool> {
     Ok(exists == 1)
 }
 
+pub fn command_exists(name: &str) -> Result<bool> {
+    let conn = Connection::open(DB_PATH)?;
+
+    let mut stmt = conn.prepare(&format!(
+        "SELECT EXISTS(
+            SELECT 1 FROM {} WHERE name = ?1
+        )",
+        crate::db::TABLE_COMMANDS
+    ))?;
+
+    let exists: i32 = stmt.query_row(params![name], |row| {
+        row.get(0)
+    })?;
+
+    Ok(exists == 1)
+}
+
 pub fn insert(table_name: &str, fields: &[&str], values: &[&dyn ToSql]) -> Result<()> {
     let conn = Connection::open(DB_PATH)?;
 

@@ -32,7 +32,7 @@ pub fn create_database() -> rusqlite::Result<()> {
             id      INTEGER PRIMARY KEY AUTOINCREMENT,
             name    TEXT NOT NULL,
             content    TEXT NOT NULL,
-            description  TEXT NOT NULL
+            description  TEXT
         )",
             TABLE_COMMANDS
         ),

@@ -1,11 +1,12 @@
 use crate::models::Command;
 use crate::models::Project;
+use crate::models::errors::CommandCreationError;
 use rusqlite::Connection;
 use rusqlite::Result;
 
 use std::io;
 
-use crate::db::utils::{delete, insert, project_exists};
+use crate::db::utils::{command_exists, delete, insert, project_exists};
 use crate::db::{DB_PATH, TABLE_COMMANDS, TABLE_PROJECTS};
 
 use crate::models::ProjectCreationError;
@@ -56,7 +57,11 @@ pub fn get_projects() -> Result<Vec<Project>, ProjectCreationError> {
 }
 
 /////////// COMMANDS ///////////
-pub fn insert_command(command: &Command) -> Result<()> {
+pub fn insert_command(command: &Command) -> Result<(), CommandCreationError> {
+    if command_exists(&command.name)? {
+        return Err(CommandCreationError::AlreadyExists);
+    }
+
     insert(
         TABLE_COMMANDS,
         &["name", "content", "description"],
@@ -68,4 +73,32 @@ pub fn insert_command(command: &Command) -> Result<()> {
         command.name
     );
     Ok(())
+}
+
+pub fn get_commands() -> Result<Vec<Command>> {
+    let conn = Connection::open(DB_PATH)?;
+
+    let mut stmt = conn.prepare(&format!(
+        "SELECT name, content, description FROM {}",
+        crate::db::TABLE_COMMANDS
+    ))?;
+
+    let rows = stmt.query_map([], |row| {
+        Ok(Command {
+            name: row.get(0)?,
+            content: row.get(1)?,
+            description: row.get(2)?, // Option<String> works: NULL → None
+        })
+    })?;
+
+    let mut commands = Vec::new();
+    for row in rows {
+        commands.push(row?);
+    }
+
+    Ok(commands)
+}
+
+pub fn delete_command(name: &str) -> Result<(), io::Error> {
+    delete(TABLE_COMMANDS, "name", name)
 }

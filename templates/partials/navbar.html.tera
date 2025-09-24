@@ -5,7 +5,12 @@
             <img src="/favicon.ico" alt="" width="60" height="60" class="me-2">
             Deployer
         </a>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/">Home</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
                 <a class="nav-link text-white" href="/commands">Commands</a>
             </li>

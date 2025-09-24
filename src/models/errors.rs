@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[allow(dead_code)]
 #[derive(Debug)]
 pub enum ProjectCreationError {
@@ -7,7 +9,13 @@ pub enum ProjectCreationError {
     DatabaseError(rusqlite::Error),
 }
 
-use std::fmt;
+#[allow(dead_code)]
+#[derive(Debug)]
+pub enum CommandCreationError {
+    AlreadyExists,
+    InvalidName,
+    DatabaseError(rusqlite::Error),
+}
 
 impl fmt::Display for ProjectCreationError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -18,9 +26,22 @@ impl fmt::Display for ProjectCreationError {
                     "A project with this name or github URL already exists ..."
                 )
             }
+
             ProjectCreationError::InvalidName => write!(f, "Invalid project name"),
             ProjectCreationError::InvalidGithubUrl => write!(f, "Invalid GitHub URL"),
             ProjectCreationError::DatabaseError(_) => write!(f, "Internal database error"),
+        }
+    }
+}
+
+impl fmt::Display for CommandCreationError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            CommandCreationError::AlreadyExists => {
+                write!(f, "A command with this name already exists ...")
+            }
+            CommandCreationError::InvalidName => write!(f, "Invalid command name"),
+            CommandCreationError::DatabaseError(_) => write!(f, "Internal database error"),
         }
     }
 }
@@ -45,5 +66,11 @@ impl fmt::Display for ProjectCreationError {
 impl From<rusqlite::Error> for ProjectCreationError {
     fn from(err: rusqlite::Error) -> Self {
         ProjectCreationError::DatabaseError(err)
+    }
+}
+
+impl From<rusqlite::Error> for CommandCreationError {
+    fn from(err: rusqlite::Error) -> Self {
+        CommandCreationError::DatabaseError(err)
     }
 }

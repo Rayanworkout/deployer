@@ -1,5 +1,7 @@
-pub mod crud;
+pub mod commands;
+pub mod projects;
 pub mod index;
 
-pub use crud::*;
+pub use commands::*;
+pub use projects::*;
 pub use index::{home, rocket_uri_macro_home};

@@ -6,19 +6,11 @@ use crate::routes;
 use std::io;
 // Template engine
 use rocket::form::Form;
-use rocket::form::FromForm;
 use rocket::http::Status;
 use rocket::response::{Flash, Redirect};
 
-#[derive(FromForm)]
-pub struct ProjectForm {
-    pub name: String,
-    pub description: Option<String>,
-    pub github_url: Option<String>,
-}
-
 #[post("/create-project", data = "<project_form>")]
-pub fn create_project_view(project_form: Form<ProjectForm>) -> Result<Redirect, Flash<Redirect>> {
+pub fn create_project_endpoint(project_form: Form<Project>) -> Result<Redirect, Flash<Redirect>> {
     let pj = project_form.into_inner();
 
     let project = Project {
@@ -37,7 +29,7 @@ pub fn create_project_view(project_form: Form<ProjectForm>) -> Result<Redirect, 
 }
 
 #[delete("/delete-project/<name>")]
-pub fn delete_project_view(name: String) -> Result<Redirect, (Status, String)> {
+pub fn delete_project_endpoint(name: String) -> Result<Redirect, (Status, String)> {
     match delete_project(&name) {
         Ok(_) => Ok(Redirect::to(uri!(routes::home))),
         Err(e) if e.kind() == io::ErrorKind::NotFound => {
