@@ -6,14 +6,17 @@ mod models;
 mod routes;
 
 use rocket_dyn_templates::Template;
-
-// FileServer to serve static files
 use rocket::fs::FileServer;
 
 use crate::routes::{
     commands_page, create_command_endpoint, create_project_endpoint, delete_command_endpoint,
     delete_project_endpoint, home,
 };
+
+// TODO
+// - Add search in the 2 pages
+// - Implement command selection with click in the right order
+
 
 #[launch]
 fn rocket() -> _ {

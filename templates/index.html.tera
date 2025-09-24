@@ -17,9 +17,8 @@
     </div>
 </div>
 
-<!-- Add Project Modal -->
 <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="/create-project" method="post" class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
@@ -34,11 +33,27 @@
                     <label for="github_url" class="form-label">Repository URL</label>
                     <input type="url" class="form-control" name="github_url" required>
                 </div>
+
+                <!-- Commands Selection -->
                 <div class="mb-3">
-                    <label for="recipe" class="form-label">Deployment Recipe</label>
-                    <textarea class="form-control" name="recipe" rows="4"
-                        placeholder="git pull && docker build ..."></textarea>
+                    <label for="commandSelect" class="form-label">Available Commands</label>
+                    <div class="input-group">
+                        <select id="commandSelect" class="form-select">
+                            {% for command in commands %}
+                            <option value="{{ command.name }}">{{ command.name }} —
+                                {{ command.description }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" class="btn btn-outline-primary" onclick="addCommand()">Add</button>
+                    </div>
                 </div>
+
+                <!-- Ordered List of Selected Commands -->
+                <div class="mb-3">
+                    <label class="form-label">Execution Order</label>
+                    <ul id="commandList" class="list-group"></ul>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -47,4 +62,45 @@
         </form>
     </div>
 </div>
+
+<script>
+    function addCommand() {
+        const select = document.getElementById('commandSelect');
+        const list = document.getElementById('commandList');
+        const selectedValue = select.value;
+        const selectedText = select.options[select.selectedIndex].text;
+
+        const li = document.createElement('li');
+        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        li.innerHTML = `
+        <span>${selectedText}</span>
+        <div>
+            <button type="button" class="btn btn-sm btn-outline-secondary me-1" onclick="moveUp(this)">↑</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary me-1" onclick="moveDown(this)">↓</button>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeCommand(this)">✕</button>
+        </div>
+        <input type="hidden" name="commands[]" value="${selectedValue}">
+    `;
+        list.appendChild(li);
+    }
+
+    function moveUp(btn) {
+        const li = btn.closest('li');
+        if (li.previousElementSibling) {
+            li.parentNode.insertBefore(li, li.previousElementSibling);
+        }
+    }
+
+    function moveDown(btn) {
+        const li = btn.closest('li');
+        if (li.nextElementSibling) {
+            li.parentNode.insertBefore(li.nextElementSibling, li);
+        }
+    }
+
+    function removeCommand(btn) {
+        btn.closest('li').remove();
+    }
+</script>
+
 {% endblock content %}
