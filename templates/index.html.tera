@@ -10,15 +10,7 @@
 </head>
 
 <body class="bg-light">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="/favicon.ico" alt="" width="60" height="60" class="me-2">
-                Deployer
-            </a>
-        </div>
-    </nav>
+    {% include "partials/navbar" %}
 
     {% if message %}
     <div class="w-50 mx-auto mt-3">
