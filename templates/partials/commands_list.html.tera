@@ -10,6 +10,10 @@
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCommandModal">+ Add
             Command</button>
     </div>
+    <div>
+        Here you can add individual commands that will be part of your deployment process (recipe). These commands can be
+        reused across multiple projects.
+    </div>
     <!-- Commands Table -->
     <div class="card shadow-sm mx-auto my-4">
         <div class="card-body">

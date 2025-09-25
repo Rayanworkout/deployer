@@ -12,6 +12,10 @@
             Project</button>
     </div>
 
+    <div class="pb-2">
+        Create your projects here. Each project can have its own deployment recipe composed of reusable commands.
+    </div>
+
     <div id="projectList">
         {% include "partials/projects_list" %}
     </div>
@@ -40,8 +44,8 @@
                     <div class="input-group">
                         <select id="commandSelect" class="form-select">
                             {% for command in commands %}
-                            <option value="{{ command.name }}">{{ command.name }} —
-                                {{ command.description }}</option>
+                            <option value="{{ command.name }}">"{{ command.content }}" —
+                                {{ command.name }}</option>
                             {% endfor %}
                         </select>
                         <button type="button" class="btn btn-outline-primary" onclick="addCommand()">Add</button>
